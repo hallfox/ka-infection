@@ -41,8 +41,7 @@ def limited_infection(users, graph, v_init, limit):
                 #stu is a student in one and a teacher in another
                 q.put(stu)
         classes[teacher] = classrm
-    #returns a list of classroom numbers to switch to new site, close to N
-    choices = find_limit(classes, N)
+    choices = find_limit(classes, limit)
     for c in choices:
         if c.updated:
             c.update()
@@ -50,7 +49,19 @@ def limited_infection(users, graph, v_init, limit):
             if g.updated:
                 g.update()
 
-
+#returns a list of classroom numbers to switch to new site, close to limit
+#classes: a list whose indeces correspond to the size of each class
+#n: the limit we want to approach
+def find_limit(classes, n):
+    total = 0
+    rooms = []
+    for c in range(len(classes)):
+        if total + classes[c] > n:
+            continue
+        else:
+            total += c
+            room.append(c)
+    return rooms
 
 class User():
     """Defines a simple user object with a version property that defines

@@ -19,6 +19,8 @@ class InfectionTest(unittest.TestCase):
     def test_total_infection(self):
         total_infection(self.users, self.graph, 1)
         self.assertEqual([u.version for u in self.users], [1, 1, 1, 0, 0, 1, 0, 1, 1, 1])
+    def test_limited_infection(self):
+        limited_infection(self.users, self.graph, 1, 5)
 
 
 if __name__ == "__main__":
