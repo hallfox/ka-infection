@@ -33,14 +33,14 @@ def limited_infection(users, graph, limit):
         if visited[user]:
             continue
         classes = bfs_classes(user, graph, visited)
-        choices = find_limit(classes, limit)
+        choices = find_limit(classes, limit - infected)
 
         print("Selected teachers: " + str(choices))
         for c in choices:
             #infect the teacher
             if not users[c].updated:
                 users[c].update()
-                print("Limited infection: Updated vertex {}".format(g))
+                print("Limited infection: Updated vertex {}".format(c))
                 infected += 1
             #now infect the classroom
             for g in graph[c]:
@@ -63,10 +63,8 @@ def bfs_classes(user, graph, visited):
         visited[teacher] = True
         classrm = 1
         for stu in graph[teacher]:
-            classrm += 1
             if not visited[stu]:
-                #this creates an overlap if I choose two classrooms where
-                #stu is a student in one and a teacher in another
+                classrm += 1
                 q.put(stu)
         classes[teacher] = classrm
     return classes
@@ -81,7 +79,7 @@ def find_limit(classes, n):
     for c in range(len(classes)):
         if total >= n:
             break
-        if classes[c] <= 1 or total + classes[c] > n:
+        if classes[c] <= 0 or total + classes[c] > n:
             continue
         else:
             total += classes[c]

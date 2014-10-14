@@ -3,18 +3,19 @@ import unittest
 
 class InfectionTest(unittest.TestCase):
     def setUp(self):
-        self.users = [User() for x in range(10)] #a collection of users
+        self.users = [User() for x in range(11)] #a collection of users
         self.graph = {
-            0: [],
-            1: [0,2,8,9],
-            2: [5,7],
-            3: [4],
-            4: [3],
+            0: [5],
+            1: [0],
+            2: [6],
+            3: [7],
+            4: [8,9],
             5: [],
-            6: [],
+            6: [2],
             7: [],
             8: [],
-            9: []
+            9: [],
+            10: []
         }
     # def test_total_infection(self):
         # total_infection(self.users, self.graph, 1)
