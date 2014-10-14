@@ -5,7 +5,7 @@ def total_infection(users, graph, v_user, visited=None):
     if visited == None:
         visited = [False for x in users]
     if not visited[v_user]:
-        print("Visited vertex {}".format(v_user))
+        print("Total infection: Visited vertex {}".format(v_user))
         visited[v_user] = True
         users[v_user].update()
         for v_u in graph[v_user]:
@@ -25,13 +25,14 @@ import queue
 #limit: approximately the number of people to be infected, not exact
 def limited_infection(users, graph, v_init, limit):
     if limit <= 1:
-        throw Error() #no
+        raise ValueError("limit is too small") #no
     q = queue.Queue()
     q.put(v_init)
     visited = [False for x in users]
     classes = [0 for x in users]
     while not q.empty():
         teacher = q.get()
+        print("Limited infection: Visited vertex {}".format(teacher))
         visited[teacher] = True
         classrm = 1
         for stu in graph[teacher]:
@@ -42,12 +43,16 @@ def limited_infection(users, graph, v_init, limit):
                 q.put(stu)
         classes[teacher] = classrm
     choices = find_limit(classes, limit)
+    print("Selected teachers: " + choices)
     for c in choices:
-        if c.updated:
-            c.update()
-        for g in graph[c]
-            if g.updated:
-                g.update()
+        #infect the teacher
+        if not users[c].updated:
+            users[c].update()
+        #now infect the class
+        for g in graph[c]:
+            if not users[g].updated:
+                print("Limited infection: Updated vertex {}".format(g))
+                users[g].update()
 
 #returns a list of classroom numbers to switch to new site, close to limit
 #classes: a list whose indeces correspond to the size of each class
@@ -55,12 +60,13 @@ def limited_infection(users, graph, v_init, limit):
 def find_limit(classes, n):
     total = 0
     rooms = []
+    print("Classroom sizes: " + classes)
     for c in range(len(classes)):
-        if total + classes[c] > n:
+        if classes[c] <= 1 or total + classes[c] > n:
             continue
         else:
             total += c
-            room.append(c)
+            rooms.append(c)
     return rooms
 
 class User():
