@@ -43,7 +43,7 @@ def limited_infection(users, graph, v_init, limit):
                 q.put(stu)
         classes[teacher] = classrm
     choices = find_limit(classes, limit)
-    print("Selected teachers: " + choices)
+    print("Selected teachers: " + str(choices))
     for c in choices:
         #infect the teacher
         if not users[c].updated:
@@ -60,12 +60,14 @@ def limited_infection(users, graph, v_init, limit):
 def find_limit(classes, n):
     total = 0
     rooms = []
-    print("Classroom sizes: " + classes)
+    print("Classroom sizes: " + str(classes))
     for c in range(len(classes)):
+        if total >= n:
+            break
         if classes[c] <= 1 or total + classes[c] > n:
             continue
         else:
-            total += c
+            total += classes[c]
             rooms.append(c)
     return rooms
 

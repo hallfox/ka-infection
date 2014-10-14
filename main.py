@@ -23,7 +23,7 @@ class InfectionTest(unittest.TestCase):
     def test_limited_infection(self):
         limited_infection(self.users, self.graph, 1, 5)
         self.assertEqual([u.updated for u in self.users],
-                        [True, True, True, False, False, True, False, True, True, True])
+                        [True, True, True, False, False, False, False, False, True, True])
 
 
 if __name__ == "__main__":
