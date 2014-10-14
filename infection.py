@@ -5,7 +5,7 @@ def total_infection(users, graph, v_user, visited=None):
     if visited == None:
         visited = [False for x in users]
     if not visited[v_user]:
-        print("Total infection: Visited vertex {}".format(v_user))
+        #print("Total infection: Visited vertex {}".format(v_user))
         visited[v_user] = True
         users[v_user].update()
         for v_u in graph[v_user]:
@@ -23,13 +23,40 @@ import queue
 #showing a teacher -> students relationship
 #v_init: the index of the user where the infection spreads from
 #limit: approximately the number of people to be infected, not exact
-def limited_infection(users, graph, v_init, limit):
+def limited_infection(users, graph, limit):
     if limit <= 1:
         raise ValueError("limit is too small") #no
-    q = queue.Queue()
-    q.put(v_init)
+
     visited = [False for x in users]
-    classes = [0 for x in users]
+    infected = 0
+    for user in graph.keys():
+        if visited[user]:
+            continue
+        classes = bfs_classes(user, graph, visited)
+        choices = find_limit(classes, limit)
+
+        print("Selected teachers: " + str(choices))
+        for c in choices:
+            #infect the teacher
+            if not users[c].updated:
+                users[c].update()
+                print("Limited infection: Updated vertex {}".format(g))
+                infected += 1
+            #now infect the classroom
+            for g in graph[c]:
+                if not users[g].updated:
+                    print("Limited infection: Updated vertex {}".format(g))
+                    users[g].update()
+                    infected += 1
+
+        if infected >= limit:
+            break
+
+def bfs_classes(user, graph, visited):
+    q = queue.Queue()
+    classes = [0 for x in graph.keys()]
+
+    q.put(user)
     while not q.empty():
         teacher = q.get()
         print("Limited infection: Visited vertex {}".format(teacher))
@@ -42,17 +69,7 @@ def limited_infection(users, graph, v_init, limit):
                 #stu is a student in one and a teacher in another
                 q.put(stu)
         classes[teacher] = classrm
-    choices = find_limit(classes, limit)
-    print("Selected teachers: " + str(choices))
-    for c in choices:
-        #infect the teacher
-        if not users[c].updated:
-            users[c].update()
-        #now infect the class
-        for g in graph[c]:
-            if not users[g].updated:
-                print("Limited infection: Updated vertex {}".format(g))
-                users[g].update()
+    return classes
 
 #returns a list of classroom numbers to switch to new site, close to limit
 #classes: a list whose indeces correspond to the size of each class
