@@ -51,7 +51,11 @@ def limited_infection(users, graph, limit):
 
         if infected >= limit:
             break
-
+    return infected
+#returns a list containing classroom sizes corresponding to a user by index
+#user: an integer representing the user to search for all connections
+#graph: a dict representing the graph of teacher->students relationships
+#visited: a list of booleans that keeps track of who has been visited
 def bfs_classes(user, graph, visited):
     q = queue.Queue()
     classes = [0 for x in graph.keys()]
